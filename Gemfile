@@ -6,8 +6,9 @@ gem 'thin'
 gem 'sequel'
 gem 'sqlite3'
 gem 'rake'
+gem 'faraday'
+gem 'metainspector'
 
 group :development do
-  gem 'shotgun'
   gem 'pry'
 end
