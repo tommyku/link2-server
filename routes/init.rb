@@ -1,2 +1,2 @@
-require 'root.rb'
-require 'links.rb'
+require_relative './root'
+require_relative 'links'

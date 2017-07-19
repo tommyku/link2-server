@@ -1,5 +1,5 @@
-require 'authentication'
-require 'request_body'
+require_relative './authentication'
+require_relative './request_body'
 
 before do
   authenticate!

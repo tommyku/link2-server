@@ -1,1 +1,1 @@
-require 'link'
+require_relative './link'

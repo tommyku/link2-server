@@ -1,0 +1,1 @@
+ENV['SCREENSHOT_SERVICE_URL'] ||= 'localhost:8080'
