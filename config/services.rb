@@ -1,1 +1,1 @@
-ENV['SCREENSHOT_SERVICE_URL'] ||= 'localhost:8080'
+ENV['SCREENSHOT_SERVICE_URL'] ||= 'http://localhost:8080'

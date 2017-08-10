@@ -8,7 +8,7 @@ module Sinatra
       begin
         json_string = request.body.read || '{}'
         @body_json = MultiJson.load(json_string, symbolize_keys: true)
-      rescue MultiJson::ParseError => exception
+      rescue MultiJson::ParseError
         @body_json = {}
       end
     end
