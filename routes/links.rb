@@ -18,41 +18,34 @@ get '/api/links/:id' do |id|
   content_type :json
 
   link = Link[id]
-  if link.nil?
-    status(404)
-    { link: nil }.to_json
-  else
-    { link: link.to_hash }.to_json
-  end
+  halt 404, { link: nil }.to_json if link.nil?
+
+  { link: link.to_hash }.to_json
 end
 
 post '/api/links' do
   content_type :json
 
   url = @body_json[:url]
-  if Link.where(url: url).any?
-    status(409)
-    { url: url, link: nil }.to_json
-  else
-    meta = MetaService.fetch_meta(url)
-    screenshot = ScreenshotService.fetch_screenshot(url)
-    link = Link.create(
-      [{ created_at: Time.now.utc }, meta, screenshot]
-        .reduce({}) { |m, obj| m.merge(obj) }
-    )
-    { url: url, link: link.to_hash }.to_json
-  end
+  link = Link.find(url: url)
+
+  halt 409, { url: url, link: link.to_hash }.to_json if link
+
+  meta = MetaService.fetch_meta(url)
+  screenshot = ScreenshotService.fetch_screenshot(url)
+  link = Link.create(
+    [{ created_at: Time.now.utc }, meta, screenshot]
+      .reduce({}) { |m, obj| m.merge(obj) }
+  )
+  { url: url, link: link.to_hash }.to_json
 end
 
 delete '/api/links/:id' do |id|
   content_type :json
 
   link = Link[id]
-  if link.nil?
-    status(404)
-    { link: nil }.to_json
-  else
-    link.destroy
-    { link: link.to_hash }.to_json
-  end
+  halt 404, { link: nil }.to_json if link.nil?
+
+  link.destroy
+  { link: link.to_hash }.to_json
 end
