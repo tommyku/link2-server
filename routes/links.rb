@@ -10,7 +10,7 @@ get '/api/links' do
     links: Link.order(Sequel.desc(:created_at))
                .limit(20, page * 20)
                .to_a
-               .map(:to_hash)
+               .collect(&:to_hash)
   }.to_json
 end
 
