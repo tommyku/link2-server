@@ -50,7 +50,18 @@ delete_link = lambda do |id|
   { link: link.to_hash }.to_json
 end
 
+bounce_link = lambda do |id|
+  link = Link[id]
+  halt 404, { link: nil }.to_json if link.nil?
+
+  link.update(bounce: link.bounce + 1)
+
+  redirect link.url
+end
+
 get '/api/links', &list_links
 get '/api/links/:id', &get_link
 post '/api/links', &post_link
 delete '/api/links/:id', &delete_link
+
+get '/links/bounce/:id', &bounce_link
