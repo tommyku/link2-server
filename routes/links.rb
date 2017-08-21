@@ -2,7 +2,7 @@ require 'sinatra'
 require 'faraday'
 require 'multi_json'
 
-get '/api/links' do
+list_links = lambda do
   content_type :json
 
   page = params[:page].to_i || 0
@@ -14,7 +14,7 @@ get '/api/links' do
   }.to_json
 end
 
-get '/api/links/:id' do |id|
+get_link = lambda do |id|
   content_type :json
 
   link = Link[id]
@@ -23,7 +23,7 @@ get '/api/links/:id' do |id|
   { link: link.to_hash }.to_json
 end
 
-post '/api/links' do
+post_link = lambda do
   content_type :json
 
   url = @body_json[:url]
@@ -40,7 +40,7 @@ post '/api/links' do
   { url: url, link: link.to_hash }.to_json
 end
 
-delete '/api/links/:id' do |id|
+delete_link = lambda do |id|
   content_type :json
 
   link = Link[id]
@@ -49,3 +49,8 @@ delete '/api/links/:id' do |id|
   link.destroy
   { link: link.to_hash }.to_json
 end
+
+get '/api/links', &list_links
+get '/api/links/:id', &get_link
+post '/api/links', &post_link
+delete '/api/links/:id', &delete_link
