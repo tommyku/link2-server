@@ -10,7 +10,7 @@ list_links = lambda do
     links: Link.order(Sequel.desc(:created_at))
                .limit(20, page * 20)
                .to_a
-               .collect(&:to_hash)
+               .map { |link| LinkService.get_hash(link) }
   }.to_json
 end
 
@@ -20,7 +20,7 @@ get_link = lambda do |id|
   link = Link[id]
   halt 404, { link: nil }.to_json if link.nil?
 
-  { link: link.to_hash }.to_json
+  { link: LinkService.get_hash(link) }.to_json
 end
 
 post_link = lambda do
@@ -29,7 +29,7 @@ post_link = lambda do
   url = @body_json[:url]
   link = Link.find(url: url)
 
-  halt 409, { url: url, link: link.to_hash }.to_json if link
+  halt 409, { url: url, link: LinkService.get_hash(link) }.to_json if link
 
   meta = MetaService.fetch_meta(url)
   screenshot = ScreenshotService.fetch_screenshot(url)
@@ -37,7 +37,7 @@ post_link = lambda do
     [{ created_at: Time.now.utc }, meta, screenshot]
       .reduce({}) { |m, obj| m.merge(obj) }
   )
-  { url: url, link: link.to_hash }.to_json
+  { url: url, link: LinkService.get_hash(link) }.to_json
 end
 
 delete_link = lambda do |id|
@@ -47,7 +47,7 @@ delete_link = lambda do |id|
   halt 404, { link: nil }.to_json if link.nil?
 
   link.destroy
-  { link: link.to_hash }.to_json
+  { link: LinkService.get_hash(link) }.to_json
 end
 
 bounce_link = lambda do |id|
