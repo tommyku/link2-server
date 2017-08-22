@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'faraday'
+gem 'jwe'
+gem 'jwt'
 gem 'metainspector'
 gem 'rake'
 gem 'sequel'
