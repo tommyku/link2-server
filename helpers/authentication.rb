@@ -3,10 +3,9 @@ require 'multi_json'
 module Sinatra
   module Authentication
     def authenticate!
-      puts request
       # Authenticate client here
 
-      halt 401, MultiJson.dump({message: "You are not authorized to access this resource"}) unless authenticated?
+      halt 401, 'you can\'t' unless authenticated?
     end
 
     def authenticated?
