@@ -5,6 +5,6 @@ before(%r{/api/links.*}) do
   authenticate!
 end
 
-before(%r{/api/links.*}) do
+before([%r{/api/links.*}, '/login']) do
   set_body_json
 end
