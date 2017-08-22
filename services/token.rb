@@ -38,6 +38,11 @@ class Token
     @payload[:exp] = exp
   end
 
+  def valid?
+    !expired? &&
+      @payload && @payload.key?(:user_id)
+  end
+
   private
 
   def exp

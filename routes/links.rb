@@ -6,7 +6,8 @@ list_links = lambda do
 
   page = params[:page].to_i || 0
   MultiJson.dump(
-    links: Link.order(Sequel.desc(:created_at))
+    links: Link.where(user_id: current_user.id)
+               .order(Sequel.desc(:created_at))
                .limit(20, page * 20)
                .to_a
                .map { |link| LinkService.get_hash(link) }
@@ -16,7 +17,7 @@ end
 get_link = lambda do |id|
   content_type :json
 
-  link = Link[id]
+  link = Link[user_id: current_user.id, id: id]
   halt 404, { link: nil }.to_json if link.nil?
 
   MultiJson.dump(link: LinkService.get_hash(link))
@@ -26,14 +27,14 @@ post_link = lambda do
   content_type :json
 
   url = @body_json[:url]
-  link = Link.find(url: url)
+  link = Link[user_id: current_user.id, url: url]
 
   halt 409, { url: url, link: LinkService.get_hash(link) }.to_json if link
 
   meta = MetaService.fetch_meta(url)
   screenshot = ScreenshotService.fetch_screenshot(url)
   link = Link.create(
-    [{ created_at: Time.now.utc }, meta, screenshot]
+    [{ created_at: Time.now.utc, user_id: current_user.id }, meta, screenshot]
       .reduce({}) { |m, obj| m.merge(obj) }
   )
   MultiJson.dump(url: url, link: LinkService.get_hash(link))
@@ -42,7 +43,7 @@ end
 delete_link = lambda do |id|
   content_type :json
 
-  link = Link[id]
+  link = Link[user_id: current_user.id, id: id]
   halt 404, { link: nil }.to_json if link.nil?
 
   link.destroy

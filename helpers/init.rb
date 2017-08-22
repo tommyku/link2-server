@@ -1,5 +1,6 @@
 require_relative './authentication'
 require_relative './request_body'
+require_relative './request_helper'
 
 before(%r{/api/links.*}) do
   authenticate!
