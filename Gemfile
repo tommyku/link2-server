@@ -9,6 +9,7 @@ gem 'rake'
 gem 'sequel'
 gem 'sinatra'
 gem 'sinatra-contrib'
+gem 'sinatra-cross_origin'
 gem 'sqlite3'
 gem 'thin'
 
