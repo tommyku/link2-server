@@ -7,5 +7,6 @@ before(%r{/api/links.*}) do
 end
 
 before([%r{/api/links.*}, '/login']) do
+  content_type :json
   set_body_json
 end

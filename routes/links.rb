@@ -2,8 +2,6 @@ require 'faraday'
 require 'multi_json'
 
 list_links = lambda do
-  content_type :json
-
   page = params[:page].to_i || 0
   MultiJson.dump(
     links: Link.where(user_id: current_user.id)
@@ -15,8 +13,6 @@ list_links = lambda do
 end
 
 get_link = lambda do |id|
-  content_type :json
-
   link = Link[user_id: current_user.id, id: id]
   halt 404, { link: nil }.to_json if link.nil?
 
@@ -24,8 +20,6 @@ get_link = lambda do |id|
 end
 
 post_link = lambda do
-  content_type :json
-
   url = @body_json[:url]
   link = Link[user_id: current_user.id, url: url]
 
@@ -41,8 +35,6 @@ post_link = lambda do
 end
 
 delete_link = lambda do |id|
-  content_type :json
-
   link = Link[user_id: current_user.id, id: id]
   halt 404, { link: nil }.to_json if link.nil?
 

@@ -1,6 +1,4 @@
 login = lambda do
-  content_type :json
-
   username = @body_json[:username]
   password = @body_json[:password]
 
