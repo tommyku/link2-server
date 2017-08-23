@@ -3,13 +3,11 @@ require 'multi_json'
 
 list_links = lambda do
   page = params[:page].to_i || 0
-  MultiJson.dump(
-    links: Link.where(user_id: current_user.id)
-               .order(Sequel.desc(:created_at))
-               .limit(20, page * 20)
-               .to_a
-               .map { |link| LinkService.get_hash(link) }
-  )
+  MultiJson.dump(links: LinkService.get_collection(current_user.id, page))
+end
+
+list_random_links = lambda do
+  MultiJson.dump(links: LinkService.get_random_collection(current_user.id, 10))
 end
 
 get_link = lambda do |id|
@@ -52,6 +50,7 @@ bounce_link = lambda do |id|
 end
 
 get '/api/links', &list_links
+get '/api/links/random', &list_random_links
 get '/api/links/:id', &get_link
 post '/api/links', &post_link
 delete '/api/links/:id', &delete_link
