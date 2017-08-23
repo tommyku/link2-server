@@ -13,6 +13,11 @@ gem 'sinatra-cross_origin'
 gem 'sqlite3'
 gem 'thin'
 
+group :test do
+  gem 'rack-test'
+  gem 'rspec'
+end
+
 group :development do
   gem 'pry'
 end

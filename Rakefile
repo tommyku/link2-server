@@ -1,3 +1,5 @@
+require 'rspec/core/rake_task'
+
 namespace 'db' do
   desc 'Run database migrations'
   task :migrate do |t, args|
@@ -5,4 +7,8 @@ namespace 'db' do
     puts cmd
     puts `#{cmd}`
   end
+end
+
+RSpec::Core::RakeTask.new :spec do |task|
+  task.pattern = "./spec/**/*_spec.rb"
 end

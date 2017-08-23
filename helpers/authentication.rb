@@ -18,7 +18,7 @@ module Sinatra
     end
 
     def access_token
-      request.env['HTTP_ACCESS_TOKEN'] || request['HTTP_ACCESS_TOKEN']
+      request.env['HTTP_ACCESS_TOKEN'] || request.params['HTTP_ACCESS_TOKEN']
     end
 
     private
