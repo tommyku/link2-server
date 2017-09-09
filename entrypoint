@@ -6,11 +6,11 @@ CMD=$1
 
 case "$CMD" in
   'run' )
-    bundle exec ruby server.rb
+    (bundle check || bundle install) && bundle exec ruby server.rb
     ;;
 
   'dev' )
-    rerun -b -- 'bundle exec ruby server.rb'
+    (bundle check || bundle install) && rerun -b -- 'bundle exec ruby server.rb'
     ;;
 
    * )

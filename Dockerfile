@@ -8,6 +8,8 @@ WORKDIR $PROJECT_DIR
 
 COPY Gemfile Gemfile.lock $PROJECT_DIR
 
+ENV BUNDLE_PATH=/gem
+
 RUN bundle install -j 2
 
 COPY . $PROJECT_DIR
