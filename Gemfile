@@ -20,4 +20,5 @@ end
 
 group :development do
   gem 'pry'
+  gem 'rerun'
 end

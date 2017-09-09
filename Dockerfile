@@ -14,4 +14,6 @@ COPY . $PROJECT_DIR
 
 EXPOSE 3000
 
-CMD ["bundle", "exec" , "ruby", "server.rb"]
+ENTRYPOINT [ "./entrypoint" ]
+
+CMD [ "run" ]
