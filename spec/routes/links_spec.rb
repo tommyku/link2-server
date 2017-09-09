@@ -15,7 +15,7 @@ RSpec.describe 'links routes' do
       allow(User).to receive(:[]).and_return(@user)
       allow(LinkService).to receive(:get_collection).and_return([@link])
 
-      header 'ACCESS_TOKEN', @encoded_token
+      header 'AUTHENTICATION', "Bearer #{@encoded_token}"
       get '/api/links'
 
       expect(last_response).to be_ok
@@ -37,7 +37,7 @@ RSpec.describe 'links routes' do
       allow(User).to receive(:[]).and_return(@user)
       allow(LinkService).to receive(:get_random_collection).and_return([@link])
 
-      header 'ACCESS_TOKEN', @encoded_token
+      header 'AUTHENTICATION', "Bearer #{@encoded_token}"
       get '/api/links/random'
 
       expect(last_response).to be_ok
@@ -58,7 +58,7 @@ RSpec.describe 'links routes' do
       allow(User).to receive(:[]).and_return(@user)
       allow(Link).to receive(:[]).and_return(nil)
 
-      header 'ACCESS_TOKEN', @encoded_token
+      header 'AUTHENTICATION', "Bearer #{@encoded_token}"
       get '/api/links/1'
 
       expect(last_response.status).to eq 404
@@ -75,7 +75,7 @@ RSpec.describe 'links routes' do
       allow(@link).to receive(:to_hash).and_return(@link_hash)
       allow(@link).to receive(:screenshot_uuid).and_return('')
 
-      header 'ACCESS_TOKEN', @encoded_token
+      header 'AUTHENTICATION', "Bearer #{@encoded_token}"
       get '/api/links/1'
 
       expect(last_response).to be_ok
@@ -101,7 +101,7 @@ RSpec.describe 'links routes' do
       allow(@link).to receive(:to_hash).and_return(@link_hash)
       allow(@link).to receive(:screenshot_uuid).and_return('')
 
-      header 'ACCESS_TOKEN', @encoded_token
+      header 'AUTHENTICATION', "Bearer #{@encoded_token}"
       post '/api/links', { url: 'http://example.com' }.to_json
 
       expect(last_response.status).to eq 409
@@ -122,7 +122,7 @@ RSpec.describe 'links routes' do
       allow(Link).to receive(:create).and_return(@link)
       allow(LinkService).to receive(:get_hash).and_return(@link_hash)
 
-      header 'ACCESS_TOKEN', @encoded_token
+      header 'AUTHENTICATION', "Bearer #{@encoded_token}"
       post '/api/links', { url: 'http://example.com' }.to_json
 
       expect(last_response).to be_ok
@@ -146,7 +146,7 @@ RSpec.describe 'links routes' do
       allow(User).to receive(:[]).and_return(@user)
       allow(Link).to receive(:[]).and_return(nil)
 
-      header 'ACCESS_TOKEN', @encoded_token
+      header 'AUTHENTICATION', "Bearer #{@encoded_token}"
       delete '/api/links/1'
 
       expect(last_response.status).to eq 404
@@ -164,7 +164,7 @@ RSpec.describe 'links routes' do
       allow(@link).to receive(:screenshot_uuid).and_return('')
       allow(@link).to receive(:destroy).and_return(true)
 
-      header 'ACCESS_TOKEN', @encoded_token
+      header 'AUTHENTICATION', "Bearer #{@encoded_token}"
       delete '/api/links/1'
 
       expect(last_response).to be_ok

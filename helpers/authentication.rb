@@ -4,6 +4,8 @@ require 'jwe'
 
 module Sinatra
   module Authentication
+    AUTH_TOKEN_REGEXP = /Bearer ([\d\w\._-]+)/
+
     def authenticate!
       halt 401, 'you can\'t' unless authenticated?
     end
@@ -18,7 +20,8 @@ module Sinatra
     end
 
     def access_token
-      request.env['HTTP_ACCESS_TOKEN'] || request.params['HTTP_ACCESS_TOKEN']
+      token_match = (request.env['HTTP_AUTHENTICATION'] || request.params['HTTP_AUTHENTICATION'])&.match(AUTH_TOKEN_REGEXP)
+      token_match ? token_match[1] : nil
     end
 
     private
