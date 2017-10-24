@@ -89,9 +89,28 @@ RSpec.describe 'links routes' do
       expect(last_response.status).to eq 401
     end
 
+    it 'returns 400 if link is not available' do
+      @user = double(:user, id: 1, username: 'test', email: 'test@test')
+      @link_hash = { id: 1, user_id: 1, valid?: false }
+      @link = double(:link, @link_hash)
+      @encoded_token = Token.new({ user_id: 1 }).encode
+      @url = 'http://example.com'
+
+      allow(User).to receive(:[]).and_return(@user)
+      allow(Link).to receive(:new).and_return(@link)
+      header 'AUTHENTICATION', "Bearer #{@encoded_token}"
+      post '/api/links', { url: 'http://example.com' }.to_json
+
+      expect(last_response.status).to eq 400
+      expect(last_response.body).to eq({
+        url: 'http://example.com',
+        link: nil
+      }.to_json)
+    end
+
     it 'returns 409 if link already there' do
       @user = double(:user, id: 1, username: 'test', email: 'test@test')
-      @link_hash = { id: 1, user_id: 1 }
+      @link_hash = { id: 1, user_id: 1, valid?: true }
       @link = double(:link, @link_hash)
       @encoded_token = Token.new({ user_id: 1 }).encode
       @url = 'http://example.com'
@@ -113,7 +132,7 @@ RSpec.describe 'links routes' do
 
     it 'creates and returns the link on auth' do
       @user = double(:user, id: 1, username: 'test', email: 'test@test')
-      @link_hash = { id: 1, user_id: 1 }
+      @link_hash = { id: 1, user_id: 1, valid?: true }
       @link = double(:link, @link_hash)
       @encoded_token = Token.new({ user_id: 1 }).encode
 
