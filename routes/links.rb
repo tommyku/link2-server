@@ -23,12 +23,14 @@ post_link = lambda do
 
   halt 409, { url: url, link: LinkService.get_hash(link) }.to_json if link
 
+  link = Link.new({ created_at: Time.now.utc, user_id: current_user.id, url: url })
+
+  halt 400, { url: url, link: nil }.to_json unless link.valid?
+
   meta = MetaService.fetch_meta(url)
+  link.set(meta)
   screenshot = ScreenshotService.fetch_screenshot(url)
-  link = Link.create(
-    [{ created_at: Time.now.utc, user_id: current_user.id }, meta, screenshot]
-      .reduce({}) { |m, obj| m.merge(obj) }
-  )
+  link.set(screenshot)
   MultiJson.dump(url: url, link: LinkService.get_hash(link))
 end
 
