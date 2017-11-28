@@ -8,6 +8,5 @@ end
 
 before([%r{/api/links.*}, '/login']) do
   content_type :json
-  cross_origin
   set_body_json
 end

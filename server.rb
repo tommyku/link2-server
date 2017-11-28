@@ -1,6 +1,5 @@
 require 'sinatra'
 require 'sinatra/config_file'
-require 'sinatra/cross_origin'
 require 'sequel'
 require 'net/http'
 require_relative './config/init'
